@@ -7,8 +7,9 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
+	"github.com/steelthedev/task-handler/conn"
 	"github.com/steelthedev/task-handler/data"
-	"github.com/steelthedev/task-handler/db"
+	"github.com/steelthedev/task-handler/services"
 
 	"gopkg.in/natefinch/lumberjack.v2"
 )
@@ -29,33 +30,34 @@ func main() {
 	}
 
 	// Start Database
-	if err := db.InitDB(); err != nil {
+	if err := conn.InitDB(); err != nil {
 		slog.Error("Could not connect to db", "Error=", err)
 	}
 
-	s := data.TaskService{}
+	s := services.TaskService{}
 
-	taskOne := data.Task{
-		Title:     "Task 1",
+	tasktwo := data.Task{
+		Title:     "Task 2",
 		CreatedAt: time.Now(),
 		EndAt:     time.Now(),
 	}
 
-	// tasktwo := data.Task{
-	// 	Title:     "Task 2",
-	// 	CreatedAt: time.Now(),
-	// 	EndAt:     time.Now(),
-	// }
+	taskThree := data.Task{
+		Title:     "Task 3",
+		CreatedAt: time.Now(),
+		EndAt:     time.Now(),
+	}
 
-	// taskThree := data.Task{
-	// 	Title:     "Task 3",
-	// 	CreatedAt: time.Now(),
-	// 	EndAt:     time.Now(),
-	// }
-
-	s.CreateNewTask(taskOne)
-	// s.CreateNewTask(tasktwo)
-	// s.CreateNewTask(taskThree)
+	_, err := s.CreateNewTask(tasktwo)
+	if err != nil {
+		slog.Info("could not add a new task", "Error=", err)
+		return
+	}
+	_, err = s.CreateNewTask(taskThree)
+	if err != nil {
+		slog.Info("could not add a new task", "Error=", err)
+		return
+	}
 
 	tasks, err := s.GetAllTasks()
 	if err != nil {
@@ -69,4 +71,11 @@ func main() {
 		fmt.Printf(" %d. %s \n Start time: %s \n End time: %s \n", index, task.Title, task.CreatedAt, task.EndAt)
 		fmt.Println("------------------------------------")
 	}
+
+	fmt.Println("Single mf")
+	task, err := s.GetTask(2)
+	if err != nil {
+		return
+	}
+	fmt.Println(task)
 }

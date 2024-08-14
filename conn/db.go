@@ -1,8 +1,9 @@
-package db
+package conn
 
 import (
 	"os"
 
+	"github.com/steelthedev/task-handler/data"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -20,6 +21,8 @@ func InitDB() error {
 	if err != nil {
 		return err
 	}
+
+	DB.AutoMigrate(data.Task{})
 
 	return nil
 }
