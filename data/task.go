@@ -6,13 +6,14 @@ import (
 	"time"
 )
 
-type task interface {
+type taskInterface interface {
 	CreateTask(task *Task) (*Task, error)
 	GetAll() (*[]Task, error)
 }
 
 type Task struct {
-	Title     string    `json:"task"`
+	ID        uint      `json:"id" gorm:"primaryKey;autoIncrement"`
+	Title     string    `json:"task" gorm:"column:title"`
 	CreatedAt time.Time `json:"created_at"`
 	EndAt     time.Time `json:"end_at"`
 }
