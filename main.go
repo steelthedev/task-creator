@@ -8,6 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/steelthedev/task-handler/conn"
+	"github.com/steelthedev/task-handler/handlers"
+	"github.com/steelthedev/task-handler/services"
 
 	"gopkg.in/natefinch/lumberjack.v2"
 )
@@ -32,15 +34,23 @@ func main() {
 		slog.Error("Could not connect to db", "Error=", err)
 	}
 
-	// s := services.TaskService{}
+	s := services.TaskService{}
+
+	taskHandler := handlers.NewTaskHandler(s)
 
 	app := gin.Default()
 
+	// Register task route groups and handlers
 	taskRoutes := app.Group("task")
+	taskRoutes.GET("/all", taskHandler.GetTasks)
+	taskRoutes.POST("/add", taskHandler.HandleCreate)
 
 	// Get port from env
 	port := os.Getenv("PORT")
-
-	log.Fatal(app.Run(port))
+	if len(port) > 0 {
+		log.Fatal(app.Run(port))
+	} else {
+		log.Fatal(app.Run(":8000"))
+	}
 
 }

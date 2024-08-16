@@ -28,23 +28,20 @@ func NewCustomError(code int, msg string) *CustomError {
 	}
 }
 
-func InternalError(code int, msg string) *CustomError {
-	if msg == "" {
-		return NewCustomError(http.StatusInternalServerError, "Internal server error")
-	}
-	return NewCustomError(http.StatusInternalServerError, msg)
+func InternalError() *CustomError {
+
+	return NewCustomError(http.StatusInternalServerError, "Internal server error")
+
 }
 
-func NotFound(code int, msg string) *CustomError {
-	if msg == "" {
-		return NewCustomError(http.StatusNotFound, "Resource could not be found")
-	}
-	return NewCustomError(http.StatusNotFound, msg)
+func NotFound() *CustomError {
+
+	return NewCustomError(http.StatusNotFound, "Resource could not be found")
+
 }
 
-func BadRequest(code int, msg string) *CustomError {
-	if msg == "" {
-		return NewCustomError(http.StatusBadRequest, "Bad Request")
-	}
-	return NewCustomError(http.StatusBadRequest, msg)
+func BadRequest() *CustomError {
+
+	return NewCustomError(http.StatusBadRequest, "Bad Request")
+
 }
