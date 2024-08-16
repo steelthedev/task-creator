@@ -31,4 +31,5 @@ func (u *User) ValidateEmail() error {
 	if !utils.EmailIsValid(u.Email) {
 		return fmt.Errorf("invalid email")
 	}
+	return nil
 }

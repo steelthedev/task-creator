@@ -34,9 +34,11 @@ func main() {
 		slog.Error("Could not connect to db", "Error=", err)
 	}
 
-	s := services.TaskService{}
+	taskService := services.TaskService{}
+	userService := services.UserService{}
 
-	taskHandler := handlers.NewTaskHandler(s)
+	taskHandler := handlers.NewTaskHandler(&taskService)
+	userHandler := handlers.NewUserHandler(&userService)
 
 	app := gin.Default()
 
@@ -45,6 +47,10 @@ func main() {
 	taskRoutes.GET("/all", taskHandler.GetTasks)
 	taskRoutes.POST("/add", taskHandler.HandleCreate)
 	taskRoutes.GET("/get/:id", taskHandler.HandleGetTask)
+
+	// regoster user routes
+	userRoutes := app.Group("user")
+	userRoutes.POST("/create", userHandler.HandleCreateUser)
 
 	// Get port from env
 	port := os.Getenv("PORT")

@@ -8,15 +8,15 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/steelthedev/task-handler/data"
 	"github.com/steelthedev/task-handler/dto"
-	"github.com/steelthedev/task-handler/errors"
+	"github.com/steelthedev/task-handler/exceptions"
 	"github.com/steelthedev/task-handler/services"
 )
 
 type TaskHandler struct {
-	TaskService services.TaskService
+	TaskService *services.TaskService
 }
 
-func NewTaskHandler(taskService services.TaskService) *TaskHandler {
+func NewTaskHandler(taskService *services.TaskService) *TaskHandler {
 	return &TaskHandler{
 		TaskService: taskService,
 	}
@@ -28,7 +28,7 @@ func (ts *TaskHandler) GetTasks(ctx *gin.Context) {
 	tasks, err := ts.TaskService.GetAllTasks()
 	if err != nil {
 		slog.Error("An error occured while getting tasks", "Error", err)
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, errors.InternalError())
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, exceptions.InternalError())
 		return
 	}
 	ctx.IndentedJSON(http.StatusOK, gin.H{
@@ -44,7 +44,7 @@ func (ts *TaskHandler) HandleCreate(ctx *gin.Context) {
 	// check if request body checks with request struct
 	if err := ctx.ShouldBindJSON(&params); err != nil {
 		slog.Error("Invalid body request", "Error", err)
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, errors.BadRequest())
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, exceptions.BadRequest())
 		return
 	}
 
@@ -57,7 +57,7 @@ func (ts *TaskHandler) HandleCreate(ctx *gin.Context) {
 	task, err := ts.TaskService.CreateNewTask(newTask)
 	if err != nil {
 		slog.Error("Error occured while saving task", "Error", err)
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, errors.InternalError())
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, exceptions.InternalError())
 		return
 	}
 
@@ -83,7 +83,7 @@ func (ts *TaskHandler) HandleGetTask(ctx *gin.Context) {
 	task, err := ts.TaskService.GetTask(uint(id))
 	if err != nil {
 		slog.Error("An error occured while getting task", "Error", err)
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, errors.InternalError())
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, exceptions.InternalError())
 		return
 	}
 

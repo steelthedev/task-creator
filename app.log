@@ -3,3 +3,4 @@
 2024/08/16 22:41:46 ERROR Invalid body request Error="Key: 'TaskCreateRequest.Title' Error:Field validation for 'Title' failed on the 'required' tag"
 2024/08/16 22:42:04 ERROR Invalid body request Error="Key: 'TaskCreateRequest.Title' Error:Field validation for 'Title' failed on the 'required' tag"
 2024/08/16 22:42:27 ERROR Invalid body request Error="Key: 'TaskCreateRequest.Title' Error:Field validation for 'Title' failed on the 'required' tag"
+2024/08/16 23:47:58 ERROR Error occured while saving user: %s akinwumikaliyanu@gmail.com=Error !BADKEY="ERROR: relation \"users\" does not exist (SQLSTATE 42P01)"

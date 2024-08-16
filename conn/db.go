@@ -23,6 +23,7 @@ func InitDB() error {
 	}
 
 	DB.AutoMigrate(data.Task{})
+	DB.AutoMigrate(data.User{})
 
 	return nil
 }
