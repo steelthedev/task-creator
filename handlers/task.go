@@ -3,6 +3,7 @@ package handlers
 import (
 	"log/slog"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/steelthedev/task-handler/data"
@@ -37,7 +38,6 @@ func (ts *TaskHandler) GetTasks(ctx *gin.Context) {
 
 // Add new task
 // Uses the Create Task service
-
 func (ts *TaskHandler) HandleCreate(ctx *gin.Context) {
 	var params dto.TaskCreateRequest
 
@@ -67,4 +67,28 @@ func (ts *TaskHandler) HandleCreate(ctx *gin.Context) {
 		"message": "task created successfully",
 	})
 
+}
+
+// Get single task by id
+// Uses the services Get task
+func (ts *TaskHandler) HandleGetTask(ctx *gin.Context) {
+
+	// Get ID from param and convert it to uint
+	id, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
+	if err != nil {
+		slog.Error("error occured while getting id", "Error", err)
+	}
+
+	// Get single task using id(uint)
+	task, err := ts.TaskService.GetTask(uint(id))
+	if err != nil {
+		slog.Error("An error occured while getting task", "Error", err)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, errors.InternalError())
+		return
+	}
+
+	// Return task as response
+	ctx.IndentedJSON(http.StatusOK, gin.H{
+		"tasks": task,
+	})
 }

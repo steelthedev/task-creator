@@ -44,6 +44,7 @@ func main() {
 	taskRoutes := app.Group("task")
 	taskRoutes.GET("/all", taskHandler.GetTasks)
 	taskRoutes.POST("/add", taskHandler.HandleCreate)
+	taskRoutes.GET("/get/:id", taskHandler.HandleGetTask)
 
 	// Get port from env
 	port := os.Getenv("PORT")
